@@ -27,9 +27,10 @@ function parseForm(req) {
 export async function GET() {
   try {
     const pool = getPool();
-    const [rows] = await pool.query('SELECT id, name, address, city, image FROM schools ORDER BY id DESC');
+    const [rows] = await pool.query('SELECT id, name, address, city, state, contact, image, email_id FROM schools ORDER BY id DESC');
     return NextResponse.json({ data: rows });
   } catch (e) {
+    console.error('Database error:', e);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
@@ -55,13 +56,13 @@ export async function POST(req) {
     const [result] = await pool.execute(
       'INSERT INTO schools (name, address, city, state, contact, image, email_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
       [
-        String(fields.name),
-        String(fields.address),
-        String(fields.city),
-        String(fields.state),
-        String(fields.contact),
+        Array.isArray(fields.name) ? fields.name[0] : fields.name,
+        Array.isArray(fields.address) ? fields.address[0] : fields.address,
+        Array.isArray(fields.city) ? fields.city[0] : fields.city,
+        Array.isArray(fields.state) ? fields.state[0] : fields.state,
+        Array.isArray(fields.contact) ? fields.contact[0] : fields.contact,
         imageName,
-        String(fields.email_id),
+        Array.isArray(fields.email_id) ? fields.email_id[0] : fields.email_id,
       ]
     );
 

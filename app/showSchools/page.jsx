@@ -1,5 +1,9 @@
 async function fetchSchools() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/schools`, { cache: 'no-store' });
+  const baseUrl = process.env.VERCEL_URL 
+    ? `https://${process.env.VERCEL_URL}` 
+    : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  
+  const res = await fetch(`${baseUrl}/api/schools`, { cache: 'no-store' });
   if (!res.ok) {
     throw new Error('Failed to load schools');
   }
