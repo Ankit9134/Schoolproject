@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getPool } from '@/lib/db';
+import { getPool } from '../..lib/db';
 import { IncomingForm } from 'formidable';
 import fs from 'fs';
 import path from 'path';
